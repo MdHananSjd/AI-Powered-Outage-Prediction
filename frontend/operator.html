@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Dashboard - GridShield AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <header class="bg-gray-800 p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold">MUON: Operator Dashboard</h1>
+            <nav>
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                <span class="text-gray-600 mx-2">|</span>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-2 space-y-6">
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4">Outage & Comms Risk Forecast</h2>
+                <div class="h-64 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+                    <p>Interactive Map / Heatmap of Vulnerable Regions (Simulated)</p>
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm">Risk Horizon:</span>
+                        <select class="bg-gray-700 rounded p-1 text-sm">
+                            <option>30 min</option>
+                            <option>60 min</option>
+                            <option>12 hr</option>
+                        </select>
+                    </div>
+                    <span class="text-sm font-semibold text-red-500">Alert Level: CRITICAL</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Space Weather Metrics</h3>
+                    <div class="h-40 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+                        <p>Live Chart: Kp, Dst Index (Simulated)</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Network Telemetry</h3>
+                    <div class="h-40 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
+                        <p>Live Chart: Latency, Packet Loss (Simulated)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Alerts & Explainable AI</h3>
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg bg-red-600 bg-opacity-30 border border-red-500">
+                        <p class="font-bold text-red-400">CRITICAL ALERT: High Outage Probability (70%)</p>
+                        <p class="text-sm text-gray-300 mt-2">Reasoning: Multimodal fusion detected a significant muon spike, combined with a high Kp index and elevated network packet loss in the affected region. All indicators point to an imminent geomagnetic event affecting ground-level infrastructure.</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-yellow-600 bg-opacity-30 border border-yellow-500">
+                        <p class="font-bold text-yellow-400">WARNING: Elevated Risk (45%)</p>
+                        <p class="text-sm text-gray-300 mt-2">Reasoning: Solar X-ray flux is increasing, indicating a possible flare event. Monitor key links in polar regions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4">Mitigation Actions</h2>
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg bg-gray-700">
+                        <p class="font-bold">Automated Recommendation</p>
+                        <p class="text-sm text-gray-300 mt-1">System recommends rerouting bulk data traffic to a secondary, shielded link.</p>
+                        <div class="mt-4 flex space-x-2">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded transition-colors">
+                                Trigger Auto-Mitigation
+                            </button>
+                            <button class="bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded transition-colors">
+                                Manual Override
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-gray-700">
+                        <p class="font-bold">Historical Analysis</p>
+                        <p class="text-sm text-gray-300 mt-1">Review past mitigation outcomes.</p>
+                        <button class="mt-4 bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded transition-colors">
+                            View Reports
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4">Scenario Simulation</h2>
+                <p class="text-gray-300 mb-4">Run a "what-if" scenario to see predicted impacts.</p>
+                <select class="w-full bg-gray-700 rounded p-2 mb-4">
+                    <option>Select Scenario...</option>
+                    <option>X-class Flare Event</option>
+                    <option>Severe Geomagnetic Storm</option>
+                </select>
+                <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded transition-colors">
+                    Run Simulation
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

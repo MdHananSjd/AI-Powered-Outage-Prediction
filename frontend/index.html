@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUON AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #0d0d0d;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <canvas id="particleCanvas"></canvas>
+
+    <header class="p-6">
+        <nav class="flex justify-between items-center max-w-7xl mx-auto">
+            <a href="index.html" class="text-xl font-semibold">MUON AI</a>
+            <ul class="flex space-x-6">
+                <li><a href="operator.html" class="text-gray-400 hover:text-white transition-colors">Operator</a></li>
+                <li><a href="citizen.html" class="text-gray-400 hover:text-white transition-colors">Citizen</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="relative h-screen flex flex-col items-center justify-center text-center px-4">
+        <div class="mb-4 bg-gray-700 bg-opacity-30 backdrop-blur-sm rounded-full px-4 py-1 flex items-center space-x-2 border border-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span class="text-sm">Solar Flare & Grid Vulnerability Prediction</span>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight max-w-4xl mx-auto">
+            Safeguarding Critical Infrastructure Against Space Weather
+        </h1>
+        <div class="mt-8 flex space-x-4">
+            <a href="operator.html" class="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition duration-300">
+                Network Operator
+            </a>
+            <a href="citizen.html" class="px-6 py-3 border border-white text-white font-semibold rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                End-User / Citizen
+            </a>
+        </div>
+    </main>
+    
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 100 };
+
+        // Resize canvas to full screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Get mouse position
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        // Particle Class
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 1;
+                this.color = 'rgba(255, 255, 255, 0.7)';
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            update() {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * this.density;
+                let directionY = forceDirectionY * force * this.density;
+
+                if (distance < mouse.radius) {
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 10;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 10;
+                    }
+                }
+            }
+        }
+
+        function init() {
+            particles = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                particles.push(new Particle(x, y));
+            }
+        }
+        init();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+        }
+        animate();
+    </script>
+</body>
+</html>
