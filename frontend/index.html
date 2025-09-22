@@ -5,143 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUON AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            overflow: hidden;
-            background-color: #0d0d0d;
-        }
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
     </style>
 </head>
-<body class="text-white">
+<body class="bg-gray-900 text-gray-200">
 
-    <canvas id="particleCanvas"></canvas>
-
-    <header class="p-6">
-        <nav class="flex justify-between items-center max-w-7xl mx-auto">
-            <a href="index.html" class="text-xl font-semibold">MUON AI</a>
-            <ul class="flex space-x-6">
-                <li><a href="operator.html" class="text-gray-400 hover:text-white transition-colors">Operator</a></li>
-                <li><a href="citizen.html" class="text-gray-400 hover:text-white transition-colors">Citizen</a></li>
-            </ul>
+    <header class="fixed top-0 left-0 right-0 p-6 z-50">
+        <nav class="glass-container flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+            <div class="flex items-center space-x-2">
+                <img src="https://www.svgrepo.com/show/440590/spark.svg" alt="Logo" class="w-8 h-8 filter invert">
+                <span class="text-xl font-bold text-gray-200">MUON AI</span>
+            </div>
+            <div class="flex space-x-6 text-gray-400">
+                <a href="#problem" class="hover:text-white transition-colors duration-300">Problem</a>
+                <a href="#solution" class="hover:text-white transition-colors duration-300">Solution</a>
+                <a href="#features" class="hover:text-white transition-colors duration-300">Features</a>
+            </div>
         </nav>
     </header>
 
-    <main class="relative h-screen flex flex-col items-center justify-center text-center px-4">
-        <div class="mb-4 bg-gray-700 bg-opacity-30 backdrop-blur-sm rounded-full px-4 py-1 flex items-center space-x-2 border border-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span class="text-sm">Solar Flare & Grid Vulnerability Prediction</span>
+    <canvas id="muonCanvas" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+
+    <section class="relative min-h-screen flex items-center justify-center p-6 bg-gray-900 bg-opacity-70 text-gray-200 z-10">
+        <div class="text-center max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-4">
+                MUON AI
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400">
+                Predicting the unseen. Protecting the essential.
+            </p>
         </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight max-w-4xl mx-auto">
-            Safeguarding Critical Infrastructure Against Space Weather
-        </h1>
-        <div class="mt-8 flex space-x-4">
-            <a href="operator.html" class="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition duration-300">
-                Network Operator
-            </a>
-            <a href="citizen.html" class="px-6 py-3 border border-white text-white font-semibold rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                End-User / Citizen
-            </a>
+    </section>
+
+    <section id="problem" class="relative min-h-screen flex items-center justify-center py-20 px-6 bg-gray-900 text-gray-200 z-10">
+        <div class="glass-container p-8 lg:p-12 max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">The Problem</h2>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                Power grids are vulnerable to solar flares. Current systems can't predict outages, causing widespread disruption.
+            </p>
         </div>
-    </main>
+    </section>
+
+    <section id="solution" class="relative min-h-screen flex items-center justify-center py-20 px-6 bg-gray-900 text-gray-200 z-10">
+        <div class="glass-container p-8 lg:p-12 max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">The Solution</h2>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                MUON AI uses cosmic ray data to predict geomagnetic events and their impact, providing actionable insights for critical infrastructure.
+            </p>
+        </div>
+    </section>
+
+    <section id="features" class="relative py-20 px-6 bg-gray-900 text-gray-200 z-10">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Key Features</h2>
+            <p class="text-lg text-gray-400 mb-12">Actionable insights for a resilient future.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">📡</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Multimodal Fusion</h3>
+                    <p class="text-gray-400">Combines satellite data, muon spikes, and Earth weather for comprehensive threat analysis.</p>
+                </div>
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">🧠</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">AI/ML Risk Forecasting</h3>
+                    <p class="text-gray-400">Uses LSTM, GNNs, and Transformers for accurate, time-series-based outage predictions.</p>
+                </div>
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">📊</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Explainable AI</h3>
+                    <p class="text-gray-400">Provides clear, transparent reasoning behind each risk forecast using SHAP and LIME.</p>
+                </div>
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">🔔</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Real-Time Alerts</h3>
+                    <p class="text-gray-400">Delivers push notifications and email alerts with clear, actionable preparation steps for citizens.</p>
+                </div>
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">💻</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Operator Dashboard</h3>
+                    <p class="text-gray-400">A comprehensive dashboard with heatmaps and scenario simulations for grid operators.</p>
+                </div>
+                <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
+                        <span class="text-3xl">⚙️</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Adaptive Mitigation</h3>
+                    <p class="text-gray-400">Automated triggers for fallback routing, bulk-data scheduling, and channel shifts.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative py-20 px-6 bg-gray-900 text-gray-200 z-10">
+            <div class="max-w-4xl mx-auto glass-container p-12 text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Enhance Resilience?</h2>
+                <p class="text-lg text-gray-400 mb-8">Join us in building a more prepared and resilient future for critical infrastructure.</p>
+                <div class="flex justify-center space-x-4">
+                    <button class="cta-button bg-gray-50 text-gray-900 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300">Get a Demo</button>
+                    <button class="cta-button glass-container text-white font-semibold py-3 px-8 rounded-full">Contact Sales</button>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="relative py-10 px-6 text-center text-gray-500 bg-gray-900 z-10">
+            <p>© 2025 MUON AI. All Rights Reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="hover:text-white transition-colors duration-300">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors duration-300">Terms of Service</a>
+            </div>
+        </footer>
+    </div>
     
-    <script>
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 100 };
-
-        // Resize canvas to full screen
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // Get mouse position
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        // Particle Class
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 2 + 1;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 30) + 1;
-                this.color = 'rgba(255, 255, 255, 0.7)';
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-
-            update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * this.density;
-                let directionY = forceDirectionY * force * this.density;
-
-                if (distance < mouse.radius) {
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
-                }
-            }
-        }
-
-        function init() {
-            particles = [];
-            let numberOfParticles = (canvas.width * canvas.height) / 9000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particles.push(new Particle(x, y));
-            }
-        }
-        init();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-        }
-        animate();
-    </script>
+    <script src="muon_effect.js"></script>
 </body>
 </html>
