@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUON AI</title>
+  <title>MUON AI - Operator Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
@@ -12,9 +12,10 @@
 
     /* Global styles */
     body {
+      font-family: 'Poppins', sans-serif;
       cursor: none;
     }
-    
+
     /* Custom cursor styles */
     #custom-cursor {
       position: fixed;
@@ -56,7 +57,16 @@
       width: 100%;
       height: 100%;
       z-index: 1; 
-      pointer-events: none; 
+      pointer-events: none;
+    }
+
+    /* Glass Effect */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     /* Fade-in Animation */
@@ -66,11 +76,11 @@
     }
 
     .fade-in {
-      animation: fadeIn 1.5s ease-in-out;
+      animation: fadeIn 1.5s ease-in-out forwards;
     }
   </style>
 </head>
-<body class="bg-black text-gray-200 fade-in">
+<body class="bg-black text-gray-200 font-poppins fade-in">
 
   <div id="custom-cursor" class="mix-blend-lighten">
     <div class="cursor-dot absolute"></div>
@@ -93,92 +103,92 @@
 
   <canvas id="particleCanvas"></canvas>
 
-  <section class="relative min-h-screen flex items-center justify-center p-6 bg-transparent text-gray-200 z-10 pt-20">
-    <div class="text-center max-w-4xl mx-auto px-4">
-      <p class="text-xl md:text-4xl text-gray-400">
-        Predicting the unseen. Protecting the essential.
-      </p>
-    </div>
-  </section>
+  <main class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold">Operator Dashboard</h1>
+        <p class="text-lg text-gray-400 mt-2">Real-time risk forecasting & adaptive mitigation.</p>
+      </div>
 
-  <section id="problem-solution" class="relative min-h-screen flex items-center justify-center py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-stretch">
-      <div class="glass-container p-8 lg:p-12 text-center flex flex-col justify-center">
-        <h2 class="text-4xl font-bold mb-4">The Problem</h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          Power grids are vulnerable to solar flares. Current systems can't predict outages, causing widespread disruption.
-        </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div class="glass-container p-6 md:p-8">
+          <h2 class="text-2xl font-bold mb-4">Space Weather Indices</h2>
+          <div id="space-weather-chart" class="h-64"></div>
+        </div>
+        
+        <div class="md:col-span-2 glass-container p-6 md:p-8">
+          <h2 class="text-2xl font-bold mb-4">Regional Risk Map</h2>
+          <div id="risk-map" class="h-96 w-full"></div>
+        </div>
       </div>
-      <div class="glass-container p-8 lg:p-12 text-center flex flex-col justify-center">
-        <h2 class="text-4xl font-bold mb-4">The Solution</h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          MUON AI uses cosmic ray data to predict geomagnetic events and their impact, providing actionable insights for critical infrastructure.
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <section id="features" class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-7xl mx-auto text-center">
-      <h2 class="text-4xl font-bold mb-4">Key Features</h2>
-      <p class="text-lg text-gray-400 mb-12">Actionable insights for a resilient future.</p>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📡</span>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div class="glass-container p-6 md:p-8">
+          <h2 class="text-2xl font-bold mb-4">Network Telemetry</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-800 p-4 rounded-lg">
+              <p class="text-gray-400 text-sm">Latency</p>
+              <p class="text-xl font-bold text-cyan-400">25 ms</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+              <p class="text-gray-400 text-sm">Throughput</p>
+              <p class="text-xl font-bold text-green-400">1.2 Gbps</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+              <p class="text-gray-400 text-sm">Packet Loss</p>
+              <p class="text-xl font-bold text-rose-400">0.01%</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+              <p class="text-gray-400 text-sm">Jitter</p>
+              <p class="text-xl font-bold text-amber-400">5 ms</p>
+            </div>
           </div>
-          <h3 class="text-2xl font-semibold mb-2">Multimodal Fusion</h3>
-          <p class="text-gray-400">Combines satellite data, muon spikes, and Earth weather for comprehensive threat analysis.</p>
         </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">🧠</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">AI/ML Forecasting</h3>
-          <p class="text-gray-400">Uses LSTM, GNNs, and Transformers for accurate, time-series-based outage predictions.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📊</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Explainable AI</h3>
-          <p class="text-gray-400">Provides clear, transparent reasoning behind each risk forecast using SHAP and LIME.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">👷‍♀️</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Operator Dashboard</h3>
-          <p class="text-gray-400">A centralized hub with heatmaps, live telemetry, and automated mitigation triggers for network teams.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📢</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Citizen Alerts</h3>
-          <p class="text-gray-400">Push notifications and emails with simple, actionable steps to help citizens prepare for disruptions.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">🤖</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Adaptive Mitigation</h3>
-          <p class="text-gray-400">Automatically executes pre-defined strategies like fallback routing or bulk-data scheduling to prevent outages.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-4xl mx-auto glass-container p-12 text-center">
-      <h2 class="text-3xl font-bold mb-4">Ready to Enhance Resilience?</h2>
-      <p class="text-lg text-gray-400 mb-8">Join us in building a more prepared and resilient future for critical infrastructure.</p>
-      <div class="flex justify-center space-x-4">
-        <button class="cta-button bg-gray-50 text-gray-900 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300">Get a Demo</button>
-        <button class="cta-button glass-container text-white font-semibold py-3 px-8 rounded-full">Contact Sales</button>
+        <div class="glass-container p-6 md:p-8">
+          <h2 class="text-2xl font-bold mb-4">Active Alerts</h2>
+          <div id="alerts-log" class="space-y-4">
+            <div class="bg-gray-900 p-4 rounded-lg border-l-4 border-red-500">
+              <div class="flex justify-between items-center">
+                <p class="text-lg font-semibold text-red-500">CRITICAL: Outage Risk Elevated</p>
+                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded-full">
+                  Trigger Fallback
+                </button>
+              </div>
+              <p class="text-sm text-gray-400 mt-1">Reason: Muon Spike + High Kp Index + High Load. 
+              <span class="text-xs text-gray-500">(SHAP score: 0.8)</span></p>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-500">
+              <div class="flex justify-between items-center">
+                <p class="text-lg font-semibold text-yellow-500">WARNING: Transformer Overheating</p>
+                <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded-full">
+                  Approve Schedule
+                </button>
+              </div>
+              <p class="text-sm text-gray-400 mt-1">Reason: High Earth Temp + Geomagnetic Storm.
+              <span class="text-xs text-gray-500">(SHAP score: 0.6)</span></p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <section class="glass-container p-6 md:p-8">
+        <h2 class="text-2xl font-bold mb-4">Simulation & Scenario Analysis</h2>
+        <p class="text-gray-400 mb-4">Simulate events and visualize outcomes.</p>
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+          <select class="bg-gray-800 text-gray-200 p-2 rounded-lg">
+            <option>Select Scenario...</option>
+            <option>X-class flare hits region X</option>
+            <option>CME impact with high solar wind</option>
+          </select>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full w-full md:w-auto">
+            Run Simulation
+          </button>
+        </div>
+        <div id="sim-result-chart" class="h-64 mt-4"></div>
+      </section>
     </div>
-  </section>
+  </main>
 
   <footer id="contact" class="relative py-10 px-6 text-center text-gray-500 bg-transparent z-10">
     <p>© 2025 MUON AI. All Rights Reserved.</p>
@@ -194,6 +204,7 @@
       cursor.style.opacity = 1;
       cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
 
+      // Animate the circle on interactive elements
       const interactiveElements = document.querySelectorAll('button, a, .glass-container, select');
       let isOverInteractive = false;
       interactiveElements.forEach(el => {
@@ -213,7 +224,7 @@
     document.body.addEventListener('mouseleave', () => {
       cursor.style.opacity = 0;
     });
-    
+
     // Particle Background Class
     class ParticleBackground {
       constructor() {
@@ -223,7 +234,7 @@
         this.mouseX = 0;
         this.mouseY = 0;
         this.mouseRadius = 80;
-        this.gridSpacing = 40; 
+        this.gridSpacing = 40; // Distance between grid points
         this.init();
       }
 
@@ -232,10 +243,12 @@
         this.createGrid();
         this.animate();
         
+        // Event listeners
         window.addEventListener('resize', () => this.resize());
         document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         document.addEventListener('click', (e) => this.handleClick(e));
         
+        // Touch support for mobile
         document.addEventListener('touchmove', (e) => {
           const touch = e.touches[0];
           this.handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
@@ -269,7 +282,7 @@
               originalX: x,
               originalY: y,
               radius: 1.5,
-              color: '#E0E0E0', 
+              color: '#E0E0E0',
               hoverGlow: 0,
               clickGlow: 0
             });
@@ -446,3 +459,5 @@
   </script>
 </body>
 </html>
+<br>
+This video shows how to create a simple CSS fade-in animation, which can be useful for page loading effects.
