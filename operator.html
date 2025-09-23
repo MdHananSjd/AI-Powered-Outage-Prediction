@@ -1,458 +1,651 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUON AI - Operator Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-    /* Global styles */
-    body {
-      font-family: 'Poppins', sans-serif;
-      cursor: none;
-    }
-
-    /* Custom cursor styles */
-    #custom-cursor {
-      position: fixed;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .cursor-circle {
-      width: 20px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out, background 0.3s ease-out;
-    }
-
-    .cursor-dot {
-      width: 6px;
-      height: 6px;
-      background: #fff;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .cursor-active .cursor-circle {
-      transform: translate(-50%, -50%) scale(1.5);
-      background: rgba(255, 255, 255, 0.7);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUON AI - Operator Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
     
-    /* Particle Grid Canvas */
-    #particleCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1; 
-      pointer-events: none;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            cursor: none;
+        }
 
-    /* Glass Effect */
-    .glass-container {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+        #custom-cursor {
+            position: fixed;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    /* Fade-in Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+        .cursor-circle {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, background 0.3s ease-out;
+        }
 
-    .fade-in {
-      animation: fadeIn 1.5s ease-in-out forwards;
-    }
-  </style>
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-active .cursor-circle {
+            transform: translate(-50%, -50%) scale(1.5);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glass Effect */
+        .glass-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.0s ease-in-out forwards;
+        }
+
+        .simulation-network-graph {
+            height: 150px;
+            width: 100%;
+        }
+
+        .simulation-network-graph svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .sim-state {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .sim-state.active {
+            opacity: 1;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: #040F0F;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: #C9FBFF;
+            max-width: 400px;
+        }
+    </style>
 </head>
-<body class="bg-black text-gray-200 font-poppins fade-in">
+<body class="bg-[#040F0F] text-[#C9FBFF] font-poppins fade-in">
 
-  <div id="custom-cursor" class="mix-blend-lighten">
-    <div class="cursor-dot absolute"></div>
-    <div class="cursor-circle absolute"></div>
-  </div>
-
-  <header class="fixed top-0 left-0 right-0 p-6 z-50">
-    <nav class="glass-container flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
-      <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-sparkle fa-2xl" style="color: #ffffff;"></i>
-        <span class="text-xl font-bold text-gray-200">MUON AI</span>
-      </div>
-      <div class="flex space-x-6 text-gray-400">
-        <a href="index.html" class="hover:text-white transition-colors duration-300">Home</a>
-        <a href="operator.html" class="hover:text-white transition-colors duration-300">Operator Portal</a>
-        <a href="user.html" class="hover:text-white transition-colors duration-300">User Portal</a>
-      </div>
-    </nav>
-  </header>
-
-  <canvas id="particleCanvas"></canvas>
-
-  <main class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold">Operator Dashboard</h1>
-        <p class="text-lg text-gray-400 mt-2">Real-time risk forecasting & adaptive mitigation.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <div class="glass-container p-6 md:p-8">
-          <h2 class="text-2xl font-bold mb-4">Space Weather Indices</h2>
-          <div id="space-weather-chart" class="h-64"></div>
-        </div>
-        
-        <div class="md:col-span-2 glass-container p-6 md:p-8">
-          <h2 class="text-2xl font-bold mb-4">Regional Risk Map</h2>
-          <div id="risk-map" class="h-96 w-full"></div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div class="glass-container p-6 md:p-8">
-          <h2 class="text-2xl font-bold mb-4">Network Telemetry</h2>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p class="text-gray-400 text-sm">Latency</p>
-              <p class="text-xl font-bold text-cyan-400">25 ms</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p class="text-gray-400 text-sm">Throughput</p>
-              <p class="text-xl font-bold text-green-400">1.2 Gbps</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p class="text-gray-400 text-sm">Packet Loss</p>
-              <p class="text-xl font-bold text-rose-400">0.01%</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p class="text-gray-400 text-sm">Jitter</p>
-              <p class="text-xl font-bold text-amber-400">5 ms</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="glass-container p-6 md:p-8">
-          <h2 class="text-2xl font-bold mb-4">Active Alerts</h2>
-          <div id="alerts-log" class="space-y-4">
-            <div class="bg-gray-900 p-4 rounded-lg border-l-4 border-red-500">
-              <div class="flex justify-between items-center">
-                <p class="text-lg font-semibold text-red-500">CRITICAL: Outage Risk Elevated</p>
-                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded-full">
-                  Trigger Fallback
-                </button>
-              </div>
-              <p class="text-sm text-gray-400 mt-1">Reason: Muon Spike + High Kp Index + High Load. 
-              <span class="text-xs text-gray-500">(SHAP score: 0.8)</span></p>
-            </div>
-            <div class="bg-gray-900 p-4 rounded-lg border-l-4 border-yellow-500">
-              <div class="flex justify-between items-center">
-                <p class="text-lg font-semibold text-yellow-500">WARNING: Transformer Overheating</p>
-                <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded-full">
-                  Approve Schedule
-                </button>
-              </div>
-              <p class="text-sm text-gray-400 mt-1">Reason: High Earth Temp + Geomagnetic Storm.
-              <span class="text-xs text-gray-500">(SHAP score: 0.6)</span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <section class="glass-container p-6 md:p-8">
-        <h2 class="text-2xl font-bold mb-4">Simulation & Scenario Analysis</h2>
-        <p class="text-gray-400 mb-4">Simulate events and visualize outcomes.</p>
-        <div class="flex flex-col md:flex-row gap-4 items-center">
-          <select class="bg-gray-800 text-gray-200 p-2 rounded-lg">
-            <option>Select Scenario...</option>
-            <option>X-class flare hits region X</option>
-            <option>CME impact with high solar wind</option>
-          </select>
-          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full w-full md:w-auto">
-            Run Simulation
-          </button>
-        </div>
-        <div id="sim-result-chart" class="h-64 mt-4"></div>
-      </section>
+    <div id="custom-cursor" class="mix-blend-lighten">
+        <div class="cursor-dot absolute"></div>
+        <div class="cursor-circle absolute"></div>
     </div>
-  </main>
 
-  <footer id="contact" class="relative py-10 px-6 text-center text-gray-500 bg-transparent z-10">
-    <p>© 2025 MUON AI. All Rights Reserved.</p>
-  </footer>
+    <header class="fixed top-0 left-0 right-0 p-6 z-50">
+        <nav class="glass-container flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-sparkle fa-2xl" style="color: #ffffff;"></i>
+                <span class="text-xl font-bold text-white">MUON AI</span>
+            </div>
+            <div class="flex space-x-6 text-[#C2FCF7]">
+                <a href="index.html" class="hover:text-white transition-colors duration-300">Home</a>
+                <a href="operator.html" class="hover:text-white transition-colors duration-300">Operator Portal</a>
+                <a href="user.html" class="hover:text-white transition-colors duration-300">User Portal</a>
+            </div>
+        </nav>
+    </header>
 
-  <script src="main.js"></script>
-  <script>
-    // Custom Cursor JavaScript
-    const cursor = document.getElementById('custom-cursor');
-    const cursorCircle = document.querySelector('.cursor-circle');
+    <canvas id="particleCanvas"></canvas>
 
-    document.body.addEventListener('mousemove', (e) => {
-      cursor.style.opacity = 1;
-      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    <main class="relative py-20 px-6 bg-transparent text-[#C9FBFF] z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold">Operator Dashboard</h1>
+                <p class="text-lg text-[#85BDDF] mt-2">Real-time risk forecasting & adaptive mitigation.</p>
+            </div>
 
-      const interactiveElements = document.querySelectorAll('button, a, .glass-container, select');
-      let isOverInteractive = false;
-      interactiveElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (e.clientX > rect.left && e.clientX < rect.right && e.clientY > rect.top && e.clientY < rect.bottom) {
-          isOverInteractive = true;
-        }
-      });
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Space Weather Monitoring</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-[#85BDDF]">Kp Index</p>
+                            <p class="text-3xl font-bold text-green-400">2 <span class="text-base text-[#85BDDF] font-normal">/ 9</span></p>
+                        </div>
+                        <div>
+                            <p class="text-[#85BDDF]">Solar Flux</p>
+                            <p class="text-3xl font-bold text-amber-400">140 <span class="text-base text-[#85BDDF] font-normal">sfu</span></p>
+                        </div>
+                        <div>
+                            <p class="text-[#85BDDF]">Geomagnetic Storm</p>
+                            <p class="text-xl font-bold text-green-400">G1 (Minor)</p>
+                        </div>
+                    </div>
+                </div>
 
-      if (isOverInteractive) {
-        cursor.classList.add('cursor-active');
-      } else {
-        cursor.classList.remove('cursor-active');
-      }
-    });
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Cosmic Ray Muon Detection</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-[#85BDDF]">Current Count</p>
+                            <p class="text-3xl font-bold text-purple-400">12,450</p>
+                        </div>
+                        <div>
+                            <p class="text-[#85BDDF]">Baseline Deviation</p>
+                            <p class="text-3xl font-bold text-red-400">-5.2%</p>
+                        </div>
+                        <div class="h-24 bg-[#57737A]/20 rounded-lg flex items-center justify-center text-[#85BDDF] text-sm">
+                            <p>Real-time Muon Flux Chart</p>
+                        </div>
+                    </div>
+                </div>
 
-    document.body.addEventListener('mouseleave', () => {
-      cursor.style.opacity = 0;
-    });
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">AI/ML Prediction Engine</h2>
+                    <div class="text-center">
+                        <p class="text-[#85BDDF] text-sm">Predicted Outage Risk</p>
+                        <p class="text-6xl font-bold text-red-500 my-2">78%</p>
+                        <p class="text-[#85BDDF] text-xs">High Confidence</p>
+                    </div>
+                    <div class="mt-4 text-sm">
+                        <p class="text-[#85BDDF] mb-2">Contributing Factors (SHAP Analysis)</p>
+                        <ul class="space-y-1 text-[#C2FCF7]">
+                            <li>Muon Flux Deviation: <span class="font-bold text-red-400">+35%</span></li>
+                            <li>Solar Flare Activity: <span class="font-bold text-yellow-400">+20%</span></li>
+                            <li>Geomagnetic Storm: <span class="font-bold text-orange-400">+15%</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-    // Particle Background Class
-    class ParticleBackground {
-      constructor() {
-        this.canvas = document.getElementById('particleCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mouseX = 0;
-        this.mouseY = 0;
-        this.mouseRadius = 80;
-        this.gridSpacing = 40;
-        this.init();
-      }
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Grid Topology & Risk Assessment</h2>
+                    <div class="h-64 bg-[#57737A]/20 rounded-lg flex items-center justify-center text-[#85BDDF] text-sm">
+                        <p>Interactive Grid Map with Color-Coded Risk</p>
+                    </div>
+                </div>
 
-      init() {
-        this.resize();
-        this.createGrid();
-        this.animate();
-        
-        window.addEventListener('resize', () => this.resize());
-        document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        document.addEventListener('click', (e) => this.handleClick(e));
-        
-        document.addEventListener('touchmove', (e) => {
-          const touch = e.touches[0];
-          this.handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
-        });
-        
-        document.addEventListener('touchstart', (e) => {
-          const touch = e.touches[0];
-          this.handleClick({ clientX: touch.clientX, clientY: touch.clientY });
-        });
-      }
-
-      resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.createGrid();
-      }
-
-      createGrid() {
-        this.particles = [];
-        const cols = Math.ceil(this.canvas.width / this.gridSpacing);
-        const rows = Math.ceil(this.canvas.height / this.gridSpacing);
-        
-        for (let row = 0; row <= rows; row++) {
-          for (let col = 0; col <= cols; col++) {
-            const x = col * this.gridSpacing;
-            const y = row * this.gridSpacing;
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Network Telemetry</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg">
+                            <p class="text-[#85BDDF] text-sm">Latency</p>
+                            <p class="text-xl font-bold text-cyan-400">25 ms</p>
+                        </div>
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg">
+                            <p class="text-[#85BDDF] text-sm">Throughput</p>
+                            <p class="text-xl font-bold text-green-400">1.2 Gbps</p>
+                        </div>
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg">
+                            <p class="text-[#85BDDF] text-sm">Packet Loss</p>
+                            <p class="text-xl font-bold text-rose-400">0.01%</p>
+                        </div>
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg">
+                            <p class="text-[#85BDDF] text-sm">Jitter</p>
+                            <p class="text-xl font-bold text-amber-400">5 ms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            this.particles.push({
-              x: x,
-              y: y,
-              originalX: x,
-              originalY: y,
-              radius: 1.5,
-              color: '#E0E0E0',
-              hoverGlow: 0,
-              clickGlow: 0
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Active Alerts</h2>
+                    <div id="alerts-log" class="space-y-4">
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <div class="flex justify-between items-center">
+                                <p class="text-lg font-semibold text-red-500">CRITICAL: High Outage Risk</p>
+                                <button id="mitigate-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded-full">
+                                    Trigger Mitigation
+                                </button>
+                            </div>
+                            <p class="text-sm text-[#C2FCF7] mt-1">Reason: Muon spike & high Kp index. Confidence: 94%</p>
+                        </div>
+                        <div class="bg-[#57737A]/20 p-4 rounded-lg border-l-4 border-yellow-500">
+                            <div class="flex justify-between items-center">
+                                <p class="text-lg font-semibold text-yellow-500">WARNING: Network Congestion</p>
+                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-4 rounded-full">
+                                    View Details
+                                </button>
+                            </div>
+                            <p class="text-sm text-[#C2FCF7] mt-1">Reason: Elevated solar wind speed. Confidence: 85%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-container p-6">
+                    <h2 class="text-xl font-bold mb-4">Simulation & Scenario Analysis</h2>
+                    <p class="text-[#85BDDF] mb-4">Test network resilience by simulating a space weather event.</p>
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-4">
+                        <select id="scenario-select" class="bg-[#57737A]/20 text-[#C2FCF7] p-2 rounded-lg w-full md:w-auto">
+                            <option value="none">Select Scenario...</option>
+                            <option value="flare">X-class solar flare</option>
+                            <option value="cme">CME impact</option>
+                            <option value="storm">Severe geomagnetic storm</option>
+                        </select>
+                        <button id="run-simulation-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full w-full md:w-auto">
+                            Run Simulation
+                        </button>
+                    </div>
+                    
+                    <div id="simulation-demo" class="mt-4">
+                        <div id="sim-before" class="sim-state active p-4 rounded-lg border border-[#57737A]/30 bg-[#57737A]/20">
+                            <h3 class="text-sm text-[#85BDDF]">BEFORE: Normal State</h3>
+                            <div class="simulation-network-graph mt-2">
+                                <svg viewBox="0 0 200 100">
+                                    <line x1="10" y1="50" x2="190" y2="50" stroke="green" stroke-width="4" />
+                                    <circle cx="10" cy="50" r="5" fill="#C9FBFF" />
+                                    <circle cx="190" cy="50" r="5" fill="green" />
+                                    <text x="100" y="40" text-anchor="middle" fill="#85BDDF" font-size="10">Network Traffic</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div id="sim-after" class="sim-state p-4 rounded-lg border border-red-700 bg-red-900 mt-4">
+                            <h3 class="text-sm text-red-400">AFTER: Simulated Impact</h3>
+                            <div class="simulation-network-graph mt-2">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="mitigation-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-4">Mitigation Protocol Initiated</h3>
+            <p class="text-[#C2FCF7]">Executing automated fallback routing and network traffic prioritization. System will revert to normal operation once the threat has passed.</p>
+            <button id="close-modal-btn" class="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <footer id="contact" class="relative py-10 px-6 text-center text-[#85BDDF] bg-transparent z-10">
+        <p>© 2025 MUON AI. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        const cursorCircle = document.querySelector('.cursor-circle');
+
+        document.body.addEventListener('mousemove', (e) => {
+            cursor.style.opacity = 1;
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+
+            const interactiveElements = document.querySelectorAll('button, a, .glass-container, select');
+            let isOverInteractive = false;
+            interactiveElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (e.clientX > rect.left && e.clientX < rect.right && e.clientY > rect.top && e.clientY < rect.bottom) {
+                    isOverInteractive = true;
+                }
             });
-          }
-        }
-      }
 
-      handleMouseMove(e) {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
-        
-        this.particles.forEach(particle => {
-          const distance = Math.sqrt(
-            Math.pow(particle.x - this.mouseX, 2) + 
-            Math.pow(particle.y - this.mouseY, 2)
-          );
-          
-          if (distance < this.mouseRadius) {
-            const force = (this.mouseRadius - distance) / this.mouseRadius;
-            const angle = Math.atan2(particle.y - this.mouseY, particle.x - this.mouseX);
-            
-            particle.x = particle.originalX + Math.cos(angle) * force * 15;
-            particle.y = particle.originalY + Math.sin(angle) * force * 15;
-            
-            particle.hoverGlow = Math.max(particle.hoverGlow, force * 0.8);
-          } else {
-            particle.x += (particle.originalX - particle.x) * 0.1;
-            particle.y += (particle.originalY - particle.y) * 0.1;
-            particle.hoverGlow = Math.max(0, particle.hoverGlow - 0.05);
-          }
-        });
-      }
-
-      handleClick(e) {
-        this.particles.forEach(particle => {
-          const distance = Math.sqrt(
-            Math.pow(particle.x - e.clientX, 2) + 
-            Math.pow(particle.y - e.clientY, 2)
-          );
-          
-          if (distance < 120) {
-            const intensity = 1 - (distance / 120);
-            particle.clickGlow = Math.max(particle.clickGlow, intensity * 0.6);
-          }
-        });
-      }
-
-      updateParticles() {
-        this.particles.forEach(particle => {
-          particle.clickGlow = Math.max(0, particle.clickGlow - 0.02);
-        });
-      }
-
-      drawConnections() {
-        const cols = Math.ceil(this.canvas.width / this.gridSpacing);
-        const rows = Math.ceil(this.canvas.height / this.gridSpacing);
-        
-        for (let row = 0; row <= rows; row++) {
-          for (let col = 0; col < cols; col++) {
-            const index1 = row * (cols + 1) + col;
-            const index2 = row * (cols + 1) + col + 1;
-            
-            if (index1 < this.particles.length && index2 < this.particles.length) {
-              const particleA = this.particles[index1];
-              const particleB = this.particles[index2];
-              
-              const mouseDistance = this.distanceToLine(
-                this.mouseX, this.mouseY,
-                particleA.x, particleA.y,
-                particleB.x, particleB.y
-              );
-              
-              let opacity = 0.15;
-              if (mouseDistance < 40) {
-                opacity = Math.max(opacity, 0.4 * (1 - mouseDistance / 40));
-              }
-              
-              this.ctx.strokeStyle = `rgba(224, 224, 224, ${opacity})`;
-              this.ctx.lineWidth = 0.5;
-              this.ctx.beginPath();
-              this.ctx.moveTo(particleA.x, particleA.y);
-              this.ctx.lineTo(particleB.x, particleB.y);
-              this.ctx.stroke();
+            if (isOverInteractive) {
+                cursor.classList.add('cursor-active');
+            } else {
+                cursor.classList.remove('cursor-active');
             }
-          }
-        }
-        
-        for (let row = 0; row < rows; row++) {
-          for (let col = 0; col <= cols; col++) {
-            const index1 = row * (cols + 1) + col;
-            const index2 = (row + 1) * (cols + 1) + col;
-            
-            if (index1 < this.particles.length && index2 < this.particles.length) {
-              const particleA = this.particles[index1];
-              const particleB = this.particles[index2];
-              
-              const mouseDistance = this.distanceToLine(
-                this.mouseX, this.mouseY,
-                particleA.x, particleA.y,
-                particleB.x, particleB.y
-              );
-              
-              let opacity = 0.15;
-              if (mouseDistance < 40) {
-                opacity = Math.max(opacity, 0.4 * (1 - mouseDistance / 40));
-              }
-              
-              this.ctx.strokeStyle = `rgba(224, 224, 224, ${opacity})`;
-              this.ctx.lineWidth = 0.5;
-              this.ctx.beginPath();
-              this.ctx.moveTo(particleA.x, particleA.y);
-              this.ctx.lineTo(particleB.x, particleB.y);
-              this.ctx.stroke();
-            }
-          }
-        }
-      }
-
-      distanceToLine(px, py, x1, y1, x2, y2) {
-        const A = px - x1;
-        const B = py - y1;
-        const C = x2 - x1;
-        const D = y2 - y1;
-        
-        const dot = A * C + B * D;
-        const lenSq = C * C + D * D;
-        let param = -1;
-        
-        if (lenSq !== 0) param = dot / lenSq;
-        
-        let xx, yy;
-        
-        if (param < 0) {
-          xx = x1;
-          yy = y1;
-        } else if (param > 1) {
-          xx = x2;
-          yy = y2;
-        } else {
-          xx = x1 + param * C;
-          yy = y1 + param * D;
-        }
-        
-        const dx = px - xx;
-        const dy = py - yy;
-        return Math.sqrt(dx * dx + dy * dy);
-      }
-
-      drawParticles() {
-        this.particles.forEach(particle => {
-          const totalGlow = Math.max(particle.hoverGlow, particle.clickGlow);
-          let opacity = 0.5;
-          if (totalGlow > 0) {
-            opacity = Math.max(opacity, 0.6 * totalGlow);
-          }
-          
-          this.ctx.fillStyle = `rgba(224, 224, 224, ${opacity})`;
-          this.ctx.beginPath();
-          this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-          this.ctx.fill();
         });
-      }
 
-      animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.updateParticles();
-        this.drawConnections();
-        this.drawParticles();
-        requestAnimationFrame(() => this.animate());
-      }
-    }
+        document.body.addEventListener('mouseleave', () => {
+            cursor.style.opacity = 0;
+        });
+        
+        // Particle Background Class
+        class ParticleBackground {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.mouseRadius = 80;
+                this.gridSpacing = 40;
+                this.init();
+            }
 
-    new ParticleBackground();
-  </script>
+            init() {
+                this.resize();
+                this.createGrid();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                document.addEventListener('click', (e) => this.handleClick(e));
+                
+                document.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    this.handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
+                });
+                
+                document.addEventListener('touchstart', (e) => {
+                    const touch = e.touches[0];
+                    this.handleClick({ clientX: touch.clientX, clientY: touch.clientY });
+                });
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.createGrid();
+            }
+
+            createGrid() {
+                this.particles = [];
+                const cols = Math.ceil(this.canvas.width / this.gridSpacing);
+                const rows = Math.ceil(this.canvas.height / this.gridSpacing);
+                
+                for (let row = 0; row <= rows; row++) {
+                    for (let col = 0; col <= cols; col++) {
+                        const x = col * this.gridSpacing;
+                        const y = row * this.gridSpacing;
+                        
+                        this.particles.push({
+                            x: x,
+                            y: y,
+                            originalX: x,
+                            originalY: y,
+                            radius: 1.5,
+                            color: '#C9FBFF',
+                            hoverGlow: 0,
+                            clickGlow: 0
+                        });
+                    }
+                }
+            }
+
+            handleMouseMove(e) {
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+                
+                this.particles.forEach(particle => {
+                    const distance = Math.sqrt(
+                        Math.pow(particle.x - this.mouseX, 2) + 
+                        Math.pow(particle.y - this.mouseY, 2)
+                    );
+                    
+                    if (distance < this.mouseRadius) {
+                        const force = (this.mouseRadius - distance) / this.mouseRadius;
+                        const angle = Math.atan2(particle.y - this.mouseY, particle.x - this.mouseX);
+                        
+                        particle.x = particle.originalX + Math.cos(angle) * force * 15;
+                        particle.y = particle.originalY + Math.sin(angle) * force * 15;
+                        
+                        particle.hoverGlow = Math.max(particle.hoverGlow, force * 0.8);
+                    } else {
+                        particle.x += (particle.originalX - particle.x) * 0.1;
+                        particle.y += (particle.originalY - particle.y) * 0.1;
+                        particle.hoverGlow = Math.max(0, particle.hoverGlow - 0.05);
+                    }
+                });
+            }
+
+            handleClick(e) {
+                this.particles.forEach(particle => {
+                    const distance = Math.sqrt(
+                        Math.pow(particle.x - e.clientX, 2) + 
+                        Math.pow(particle.y - e.clientY, 2)
+                    );
+                    
+                    if (distance < 120) {
+                        const intensity = 1 - (distance / 120);
+                        particle.clickGlow = Math.max(particle.clickGlow, intensity * 0.6);
+                    }
+                });
+            }
+
+            updateParticles() {
+                this.particles.forEach(particle => {
+                    particle.clickGlow = Math.max(0, particle.clickGlow - 0.02);
+                });
+            }
+
+            drawConnections() {
+                const cols = Math.ceil(this.canvas.width / this.gridSpacing);
+                const rows = Math.ceil(this.canvas.height / this.gridSpacing);
+                
+                for (let row = 0; row <= rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const index1 = row * (cols + 1) + col;
+                        const index2 = row * (cols + 1) + col + 1;
+                        
+                        if (index1 < this.particles.length && index2 < this.particles.length) {
+                            const particleA = this.particles[index1];
+                            const particleB = this.particles[index2];
+                            
+                            const mouseDistance = this.distanceToLine(
+                                this.mouseX, this.mouseY,
+                                particleA.x, particleA.y,
+                                particleB.x, particleB.y
+                            );
+                            
+                            let opacity = 0.15;
+                            if (mouseDistance < 40) {
+                                opacity = Math.max(opacity, 0.4 * (1 - mouseDistance / 40));
+                            }
+                            
+                            this.ctx.strokeStyle = `rgba(133, 189, 223, ${opacity})`;
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particleA.x, particleA.y);
+                            this.ctx.lineTo(particleB.x, particleB.y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col <= cols; col++) {
+                        const index1 = row * (cols + 1) + col;
+                        const index2 = (row + 1) * (cols + 1) + col;
+                        
+                        if (index1 < this.particles.length && index2 < this.particles.length) {
+                            const particleA = this.particles[index1];
+                            const particleB = this.particles[index2];
+                            
+                            const mouseDistance = this.distanceToLine(
+                                this.mouseX, this.mouseY,
+                                particleA.x, particleA.y,
+                                particleB.x, particleB.y
+                            );
+                            
+                            let opacity = 0.15;
+                            if (mouseDistance < 40) {
+                                opacity = Math.max(opacity, 0.4 * (1 - mouseDistance / 40));
+                            }
+                            
+                            this.ctx.strokeStyle = `rgba(133, 189, 223, ${opacity})`;
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particleA.x, particleA.y);
+                            this.ctx.lineTo(particleB.x, particleB.y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            distanceToLine(px, py, x1, y1, x2, y2) {
+                const A = px - x1;
+                const B = py - y1;
+                const C = x2 - x1;
+                const D = y2 - y1;
+                
+                const dot = A * C + B * D;
+                const lenSq = C * C + D * D;
+                let param = -1;
+                
+                if (lenSq !== 0) param = dot / lenSq;
+                
+                let xx, yy;
+                
+                if (param < 0) {
+                    xx = x1;
+                    yy = y1;
+                } else if (param > 1) {
+                    xx = x2;
+                    yy = y2;
+                } else {
+                    xx = x1 + param * C;
+                    yy = y1 + param * D;
+                }
+                
+                const dx = px - xx;
+                const dy = py - yy;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            drawParticles() {
+                this.particles.forEach(particle => {
+                    const totalGlow = Math.max(particle.hoverGlow, particle.clickGlow);
+                    let opacity = 0.5;
+                    if (totalGlow > 0) {
+                        opacity = Math.max(opacity, 0.6 * totalGlow);
+                    }
+                    
+                    this.ctx.fillStyle = `rgba(202, 251, 255, ${opacity})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.updateParticles();
+                this.drawConnections();
+                this.drawParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        new ParticleBackground();
+
+        // New Simulation Demo Logic
+        document.getElementById('run-simulation-btn').addEventListener('click', runSimulation);
+
+        function runSimulation() {
+            const scenarioSelect = document.getElementById('scenario-select');
+            const selectedScenario = scenarioSelect.value;
+            const afterContainer = document.getElementById('sim-after');
+            const afterGraph = afterContainer.querySelector('.simulation-network-graph');
+            
+            if (selectedScenario === 'none') {
+                alert('Please select a scenario to run the simulation.');
+                return;
+            }
+
+            // Hide the 'before' state to show the 'after' state
+            document.getElementById('sim-before').classList.remove('active');
+            afterContainer.classList.add('active');
+
+            // Simulate the impact and update the graph
+            let svgContent = '';
+            let riskLevel = 'green';
+
+            if (selectedScenario === 'flare') {
+                svgContent = `<svg viewBox="0 0 200 100">
+                                <line x1="10" y1="50" x2="190" y2="50" stroke="red" stroke-width="6" stroke-dasharray="8,8" />
+                                <circle cx="10" cy="50" r="5" fill="#C9FBFF" />
+                                <circle cx="190" cy="50" r="5" fill="red" />
+                                <text x="100" y="40" text-anchor="middle" fill="#85BDDF" font-size="10">Network Traffic (Severely Degraded)</text>
+                              </svg>`;
+                riskLevel = 'red';
+            } else if (selectedScenario === 'cme') {
+                svgContent = `<svg viewBox="0 0 200 100">
+                                <line x1="10" y1="50" x2="190" y2="50" stroke="orange" stroke-width="5" />
+                                <circle cx="10" cy="50" r="5" fill="#C9FBFF" />
+                                <circle cx="190" cy="50" r="5" fill="orange" />
+                                <text x="100" y="40" text-anchor="middle" fill="#85BDDF" font-size="10">Network Traffic (Moderately Impacted)</text>
+                              </svg>`;
+                riskLevel = 'yellow';
+            } else if (selectedScenario === 'storm') {
+                svgContent = `<svg viewBox="0 0 200 100">
+                                <line x1="10" y1="50" x2="190" y2="50" stroke="yellow" stroke-width="4" />
+                                <circle cx="10" cy="50" r="5" fill="#C9FBFF" />
+                                <circle cx="190" cy="50" r="5" fill="yellow" />
+                                <text x="100" y="40" text-anchor="middle" fill="#85BDDF" font-size="10">Network Traffic (Minor Fluctuation)</text>
+                              </svg>`;
+                riskLevel = 'yellow';
+            }
+
+            afterContainer.className = `sim-state p-4 rounded-lg border border-${riskLevel}-700 bg-${riskLevel}-900/30 mt-4 active`;
+            afterGraph.innerHTML = svgContent;
+        }
+
+        // Mitigation Demo Logic
+        const mitigateButton = document.getElementById('mitigate-button');
+        const modal = document.getElementById('mitigation-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        mitigateButton.addEventListener('click', () => {
+            modal.classList.add('open');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('open');
+        });
+        
+    </script>
 </body>
 </html>
