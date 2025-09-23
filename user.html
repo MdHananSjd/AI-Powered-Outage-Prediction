@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUON AI</title>
+  <title>MUON AI - User Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-    /* Global styles */
+    
     body {
       cursor: none;
     }
-    
-    /* Custom cursor styles */
+
     #custom-cursor {
       position: fixed;
       left: 0;
@@ -48,15 +46,45 @@
       background: rgba(255, 255, 255, 0.7);
     }
     
-    /* Particle Grid Canvas */
     #particleCanvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1; 
-      pointer-events: none; 
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Glass Effect */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-card {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: #fff;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+      transform: scale(1);
+    }
+
+    .status-card.green {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.5);
+    }
+    .status-card.yellow {
+      background: rgba(234, 179, 8, 0.2);
+      border: 1px solid rgba(234, 179, 8, 0.5);
+    }
+    .status-card.red {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.5);
     }
 
     /* Fade-in Animation */
@@ -66,11 +94,11 @@
     }
 
     .fade-in {
-      animation: fadeIn 1.5s ease-in-out;
+      animation: fadeIn 1.5s ease-in-out forwards;
     }
   </style>
 </head>
-<body class="bg-black text-gray-200 fade-in">
+<body class="bg-black text-gray-200 font-poppins fade-in">
 
   <div id="custom-cursor" class="mix-blend-lighten">
     <div class="cursor-dot absolute"></div>
@@ -94,93 +122,59 @@
   <canvas id="particleCanvas"></canvas>
 
   <section class="relative min-h-screen flex items-center justify-center p-6 bg-transparent text-gray-200 z-10 pt-20">
-    <div class="text-center max-w-4xl mx-auto px-4">
-      <p class="text-xl md:text-4xl text-gray-400">
-        Predicting the unseen. Protecting the essential.
-      </p>
-    </div>
-  </section>
-
-  <section id="problem-solution" class="relative min-h-screen flex items-center justify-center py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-stretch">
-      <div class="glass-container p-8 lg:p-12 text-center flex flex-col justify-center">
-        <h2 class="text-4xl font-bold mb-4">The Problem</h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          Power grids are vulnerable to solar flares. Current systems can't predict outages, causing widespread disruption.
+    <div class="container mx-auto max-w-4xl px-4 py-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-10">Your Preparedness Dashboard</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="glass-container p-6 text-center">
+          <h2 class="text-2xl font-semibold mb-4">Current Status</h2>
+          <div id="statusIndicator" class="status-card green">
+            <p class="text-2xl font-bold">ALL CLEAR</p>
+            <p class="text-sm">No significant risk detected.</p>
+          </div>
+          <p class="text-sm text-gray-500 mt-4">This forecast is based on your selected location.</p>
+        </div>
+        <div class="glass-container p-6">
+          <h2 class="text-2xl font-semibold mb-4 text-center">Recommended Actions</h2>
+          <ul id="actionList" class="space-y-4">
+            <li class="flex items-center space-x-3">
+              <span class="text-2xl">✔️</span>
+              <p class="text-lg text-gray-400">Your devices are charged.</p>
+            </li>
+            <li class="flex items-center space-x-3">
+              <span class="text-2xl">✔️</span>
+              <p class="text-lg text-gray-400">Critical data is backed up.</p>
+            </li>
+            <li class="flex items-center space-x-3">
+              <span class="text-2xl">✔️</span>
+              <p class="text-lg text-gray-400">No immediate network disruption expected.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="glass-container p-6 mt-8">
+        <h2 class="text-2xl font-semibold mb-4 text-center">About Our Forecast</h2>
+        <p class="text-gray-400 text-sm mb-4">
+          Our system analyzes **real-time data** from multiple sources, including:
         </p>
-      </div>
-      <div class="glass-container p-8 lg:p-12 text-center flex flex-col justify-center">
-        <h2 class="text-4xl font-bold mb-4">The Solution</h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-          MUON AI uses cosmic ray data to predict geomagnetic events and their impact, providing actionable insights for critical infrastructure.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section id="features" class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-7xl mx-auto text-center">
-      <h2 class="text-4xl font-bold mb-4">Key Features</h2>
-      <p class="text-lg text-gray-400 mb-12">Actionable insights for a resilient future.</p>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📡</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Multimodal Fusion</h3>
-          <p class="text-gray-400">Combines satellite data, muon spikes, and Earth weather for comprehensive threat analysis.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">🧠</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">AI/ML Forecasting</h3>
-          <p class="text-gray-400">Uses LSTM, GNNs, and Transformers for accurate, time-series-based outage predictions.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📊</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Explainable AI</h3>
-          <p class="text-gray-400">Provides clear, transparent reasoning behind each risk forecast using SHAP and LIME.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">👷‍♀️</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Operator Dashboard</h3>
-          <p class="text-gray-400">A centralized hub with heatmaps, live telemetry, and automated mitigation triggers for network teams.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">📢</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Citizen Alerts</h3>
-          <p class="text-gray-400">Push notifications and emails with simple, actionable steps to help citizens prepare for disruptions.</p>
-        </div>
-        <div class="feature-card glass-container p-8 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-600/20 flex items-center justify-center mb-4">
-            <span class="text-3xl">🤖</span>
-          </div>
-          <h3 class="text-2xl font-semibold mb-2">Adaptive Mitigation</h3>
-          <p class="text-gray-400">Automatically executes pre-defined strategies like fallback routing or bulk-data scheduling to prevent outages.</p>
+        <div class="flex flex-wrap justify-center space-x-6 text-gray-500 text-lg">
+          <p class="flex items-center space-x-2">
+            <i class="fa-solid fa-satellite-dish"></i>
+            <span>Satellite Data</span>
+          </p>
+          <p class="flex items-center space-x-2">
+            <i class="fa-solid fa-radiation"></i>
+            <span>Cosmic Ray Detectors</span>
+          </p>
+          <p class="flex items-center space-x-2">
+            <i class="fa-solid fa-cloud-bolt"></i>
+            <span>Weather Forecasts</span>
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="relative py-20 px-6 bg-transparent text-gray-200 z-10">
-    <div class="max-w-4xl mx-auto glass-container p-12 text-center">
-      <h2 class="text-3xl font-bold mb-4">Ready to Enhance Resilience?</h2>
-      <p class="text-lg text-gray-400 mb-8">Join us in building a more prepared and resilient future for critical infrastructure.</p>
-      <div class="flex justify-center space-x-4">
-        <button class="cta-button bg-gray-50 text-gray-900 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300">Get a Demo</button>
-        <button class="cta-button glass-container text-white font-semibold py-3 px-8 rounded-full">Contact Sales</button>
-      </div>
-    </div>
-  </section>
-
-  <footer id="contact" class="relative py-10 px-6 text-center text-gray-500 bg-transparent z-10">
+  <footer class="relative py-10 px-6 text-center text-gray-500 bg-transparent z-10">
     <p>© 2025 MUON AI. All Rights Reserved.</p>
   </footer>
 
@@ -223,7 +217,7 @@
         this.mouseX = 0;
         this.mouseY = 0;
         this.mouseRadius = 80;
-        this.gridSpacing = 40; 
+        this.gridSpacing = 40;
         this.init();
       }
 
@@ -269,7 +263,7 @@
               originalX: x,
               originalY: y,
               radius: 1.5,
-              color: '#E0E0E0', 
+              color: '#E0E0E0',
               hoverGlow: 0,
               clickGlow: 0
             });

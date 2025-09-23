@@ -204,7 +204,6 @@
       cursor.style.opacity = 1;
       cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
 
-      // Animate the circle on interactive elements
       const interactiveElements = document.querySelectorAll('button, a, .glass-container, select');
       let isOverInteractive = false;
       interactiveElements.forEach(el => {
@@ -234,7 +233,7 @@
         this.mouseX = 0;
         this.mouseY = 0;
         this.mouseRadius = 80;
-        this.gridSpacing = 40; // Distance between grid points
+        this.gridSpacing = 40;
         this.init();
       }
 
@@ -243,12 +242,10 @@
         this.createGrid();
         this.animate();
         
-        // Event listeners
         window.addEventListener('resize', () => this.resize());
         document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         document.addEventListener('click', (e) => this.handleClick(e));
         
-        // Touch support for mobile
         document.addEventListener('touchmove', (e) => {
           const touch = e.touches[0];
           this.handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
@@ -459,5 +456,3 @@
   </script>
 </body>
 </html>
-<br>
-This video shows how to create a simple CSS fade-in animation, which can be useful for page loading effects.
